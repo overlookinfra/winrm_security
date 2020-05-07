@@ -1,0 +1,8 @@
+{
+    "puppet_task_version": 1,
+    "supports_noop": false,
+    "description": "Fetch the WinRM listener configuration of a system",
+    "parameters": {
+    }
+  }
+  
