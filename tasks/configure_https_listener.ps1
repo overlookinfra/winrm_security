@@ -1,11 +1,14 @@
 # Puppet Task Name: configure_https_listener
 
 $listeners = Get-ChildItem WSMan:\localhost\Listener
+
+# Evaluate if an existing HTTPS listener exists
 If (!($listeners | Where-Object {$_.Keys -like "TRANSPORT=HTTPS"})) {
 
     # Grab the system FQDN for the SSL certificate
     $certname = [System.Net.Dns]::GetHostByName($env:computerName).Hostname
 
+    # Generate a self-signed SSL certificate and add it to the local machine certificate store
     $cert = New-SelfSignedCertificate -DnsName $certname -CertStoreLocation Cert:\LocalMachine\My
 
     # Create the hashtables of settings to be used.
@@ -19,9 +22,9 @@ If (!($listeners | Where-Object {$_.Keys -like "TRANSPORT=HTTPS"})) {
         Address = "*"
     }
 
+    # Create a HTTPS listener
     New-WSManInstance -ResourceURI 'winrm/config/Listener' -SelectorSet $selectorset -ValueSet $valueset
-    Write-Output "{""status"":""Configured SSL listener.""}"
+    Write-Output "{""status"":""Configured HTTPS listener""}"
 } Else {
-    Write-Verbose "SSL listener is already active."
-    Write-Output "{""status"":""SSL listener is already active.""}"
+    Write-Output "{""status"":""HTTPS listener already configured""}"
 }
