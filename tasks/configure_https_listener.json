@@ -3,5 +3,9 @@
   "supports_noop": false,
   "description": "Configure a WinRM HTTPS listener with a self-signed SSL certificate",
   "parameters": {
+    "certificate_validity_days": {
+      "description": "The number of days the SSL certificate is valid.",
+      "type": "Optional[Integer]"
+    }
   }
 }
